@@ -36,6 +36,7 @@ https://hub.docker.com/signup
 - docker pull <Image> (Comando para baixar uma imagem Ex: docker pull ubuntu)
 - docker ps (comando para listar containers ativos)
 - docker ps -a (comando para listar todos os containers ativos ou não)
+- docker ps -s (comando para listar os containers ativos com o seu tamanho) 
 - docker run ubuntu sleep 1d (comando para criar e rodar o container (ubuntu) e executar o comando "sleep 1d" )
 > Nota: Um container só permanece ativo se houver algum processo sendo executado por ele.
 - docker stop <id> ou <name> (comando que para o container usando o id ou nome do container. Use o docker ps para saber o nome ou id do containter que deseja parar.)
@@ -48,6 +49,7 @@ https://hub.docker.com/signup
 - docker run -it <Image> <command> (comando para criar e executar o container em modo interativo. Exemplo: docker run -it ubuntu bash)
 - docker run -d <image> (comando para executar em background a imagem. Exemplo: docker run -d dockersamples/static-site)
 - docker stop $(docker container ls -q) (comando para parar todos os containers de uma única vez o -q que representa os ids dos containers.)
+- docker container rm $(docker container ls -aq) --force (comando para remover todos os containers inclusive os que estão parados por isso o -a o -q pega os ids.)
 
 ## Mapeando portas
 - docker run -d -P <image> (comando para executar em background a imagem e fazer o mapeamento da porta do container para alguma porta do meu host. Exemplo: docker run -d -P dockersamples/static-site)
@@ -59,6 +61,7 @@ https://hub.docker.com/signup
 - docker inspect <id_da_imagem> (comando para ver as informações da imagem)
 - docker history <id_da_imagem> (comando para ver as camadas da imagem)
 - docker rmi <id_da_imagem> (comando para remover uma imagem. Exemplo: docker rmi 9b5a0697feb6)
+- docker rmi $(docker image ls -aq) --force (comando para remover todas as imagens)
 
 ## Criando a primeira imagem
 
@@ -94,9 +97,103 @@ ENTRYPOINT npm start
 - docker run -d solutionswebdevops/app-node:1.0 (executando nossa imagem)
 - docker run -d -p 8080:6000 solutionswebdevops/app-node:1.0 (executando nossa imagem e atribuindo uma porta caso não tenha feito isso no Dockerfile)
 
+# Subindo imagem para o Docker Hub
+
+- Link https://hub.docker.com/
+
+- No terminal vai ser necessário autenticar seu login para poder subir alguma imagem para o Docker Hub.
+- docker login -u <nome_usuario> 
+- docker push <nome_da_imagem> (Exemplo: docker push solutionswebdevops/app-node:1.0)
+
+- docker tag <imagem_copiada> <imagem_copiada_com_novo_nome> (Exemplo: docker tag solutionswebdevops/app-node:1.0 websolutions/app-node:1.0) copia uma imagem com um novo nome
+
+# Persistindo dados no Container (Volumes, bind mounts, tmpfs)
+
+- Link https://docs.docker.com/storage/
+
+## Bind Mount
+
+- docker run -it -v <path/nome_do_diretorio>:<nome_do_diretorio_no_container> <imagem>
+(comando para criar um container associado a um diretório. Exemplo: docker run -it -v /home/diogo/volume-docker:/app ubuntu)
+- docker run -it --mount type=<type>,source=<path/nome_do_diretorio>,target=<nome_do_diretorio_no_container> <imagem> <comando>
+(Exemplo: docker run -it --mount type=bind,source=/home/diogo/volume-docker,target=/app ubuntu bash)
+
+## Volumes
+
+- docker volume create <nome_do_volume> (comando para criar um volume no docker. Exemplo: docker volume create meu-volume)
+- docker run -it -v meu-volume:/app ubuntu bash (Exemplo de criação de container utilizando um volume)
+- docker run -it --mount source=meu-volume,target=/app ubuntu bash
+
+# Tmpfs
+
+- docker run -it --tmpfs=/app ubuntu bash
+- docker run -it --mount type=tmpfs,destination=/app ubuntu bash
+
+# Comunicação através de redes
+
+- docker inspect <id> (comando para obter informações do container)
+- docker network ls (comando para listar as redes)
+- docker network create --driver bridge <nome_da_rede> (comando para criar uma rede no docker. Exemplo: docker network create --driver minha-bridge)
+- docker run -it --name ubuntu1 --network minha-bridge ubuntu bash (comando para atribui uma rede a um container que está sendo criado e nomeado por nós.)
+- docker run -it --name ubuntu2 --network none ubuntu bash (comando para atribui uma rede (none - que vai isolar o container da rede) a um container que está sendo criado e nomeado por nós.)
+- docker run -it --name ubuntu3 --network host ubuntu bash (comando para atribui uma rede (host - que vai ligar a rede do container ao host) a um container que está sendo criado e nomeado por nós.)
+
+## Pequeno exemplo de comunicação entre dos containeres
+
+Criando uma rede Bridge
+- docker network create --driver minha-bridge
+
+Baixando imagem do Mongo 4.4.6
+- docker pull mongo:4.4.6
+
+Criando container com o nome meu-mongo
+- docker run -d --network minha-bridge --name meu-mongo mongo:4.4.6
+
+Baixando imagem do aluradocker
+- docker pull aluradocker/alura-books:1.0
+
+Criando e mapeando a porta do container alurabooks para porta 3000 do meu host
+- docker run -d --network minha-bridge --name alurabooks -p 3000:3000 aluradocker/alura-books:1.0
+
+Executar no navegador http://localhost:3000 e depois http://localhost:3000/seed para carregar os livros e voltar para http://localhost:3000 e recarregar a página.
+
+
+# Docker Compose (Executando múltiplos containeres)
+
+- Criar uma pasta com o nome "ymls"
+- Criar um arquivo docker-compose.yml dentro da pasta
+
+```
+
+version: '3.9'
+services:
+  mongodb:
+    image: mongo:4.4.6
+    container_name: meu-mongo
+    networks:
+      - compose-bridge
+
+  alurabooks:
+    image: aluradocker/alura-books:1.0
+    container_name: alurabook
+    networks:
+      - compose-bridge
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongodb
+
+networks:
+  compose-bridge:
+    driver: bridge
+
+```
+
 # Comandos (Linux)
 
 - sudo su (permite usar o terminal no modo super usuário)
+- apt-get update (atualiza a imagem do ubuntu)
+- apt-get install iputils-ping -y (programa que ajuda a fazer "ping" na rede)
 
 
 
