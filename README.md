@@ -162,6 +162,10 @@ Executar no navegador http://localhost:3000 e depois http://localhost:3000/seed 
 
 - Criar uma pasta com o nome "ymls"
 - Criar um arquivo docker-compose.yml dentro da pasta
+- Depois criado o arquivo com a codificação logo abaixo iniciar comando docker-compose up
+- docker-compose up (dentro da pasta onde está o arquivo docker-compose.yml)
+- docker-compose ps
+- docker-compose down
 
 ```
 
