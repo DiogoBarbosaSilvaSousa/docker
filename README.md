@@ -199,7 +199,9 @@ networks:
 - apt-get update (atualiza a imagem do ubuntu)
 - apt-get install iputils-ping -y (programa que ajuda a fazer "ping" na rede)
 
+# Exemplo de container Mysql com algumas configurações
 
+- docker run --name container_mysql --network network_bridge -v volume_mysql:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql:latest
 
 # Links
 https://learn.microsoft.com/pt-br/windows/wsl/install
