@@ -202,6 +202,8 @@ networks:
 # Exemplo de container Mysql com algumas configurações
 
 - docker run --name container_mysql --network network_bridge -v volume_mysql:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql:latest
+- docker run --name container_mysql_5743 --network network_bridge -v volume_mysql_5743:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7.43
+- docker run --name container_mysql_8034 --network network_bridge -v volume_mysql_8034:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql:8.0.34
 
 # Links
 https://learn.microsoft.com/pt-br/windows/wsl/install
