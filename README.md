@@ -32,7 +32,7 @@ https://hub.docker.com/signup
 
 # Comandos (Windows Terminal)
 
-- docker run hello-word
+- docker run hello-world
 - docker pull <Image> (Comando para baixar uma imagem Ex: docker pull ubuntu)
 - docker ps (comando para listar containers ativos)
 - docker ps -a (comando para listar todos os containers ativos ou não)
