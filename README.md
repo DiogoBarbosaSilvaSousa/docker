@@ -16,6 +16,22 @@ Instalação do WSL (Windows Subsystem for Linux ou Subsistema Windows para Linu
 - wsl --terminate <Distribution Name> (comando para encerra uma distro específica Ex: wsl --terminate Ubuntu)
 - Link para comandos básicos do wsl (https://learn.microsoft.com/en-us/windows/wsl/basic-commands)
 
+ ## WSL Error: WslRegisterDistribution failed with error: 0x80370102
+
+  Erro na máquina virtual
+
+  Link - https://www.partitionwizard.com/partitionmagic/wslregisterdistribution-failed-with-error-0x80370102.html
+
+- Step 1: Shut down your virtual machine in Hyper-V Manager.
+
+- Step 2: Press Win + X on your keyboard and select Windows PowerShell (Admin) from the popup list.
+
+- Step 3: In the PowerShell window, copy-paste this command and press Enter:
+  
+```
+  Set-VMProcessor <VMName> -ExposeVirtualizationExtensions $true
+```
+
 # Back-end Docker Desktop WSL 2 no Windows
 
 O Windows Subsystem for Linux (WSL) 2 é um kernel Linux completo criado pela Microsoft, que permite que as distribuições do Linux sejam executadas sem o gerenciamento de máquinas virtuais
