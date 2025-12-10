@@ -214,12 +214,17 @@ networks:
 - sudo su (permite usar o terminal no modo super usuário)
 - apt-get update (atualiza a imagem do ubuntu)
 - apt-get install iputils-ping -y (programa que ajuda a fazer "ping" na rede)
+- apt-get install net-tools ("ifconfig e netstat" utilitários de rede. Com ifconfig é possível ver o IP da máquina)
 
 # Exemplo de container Mysql com algumas configurações
 
 - docker run --name container_mysql --network network_bridge -v volume_mysql:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql:latest
 - docker run --name container_mysql_5743 --network network_bridge -v volume_mysql_5743:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7.43
 - docker run --name container_mysql_8034 --network network_bridge -v volume_mysql_8034:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql:8.0.34
+
+ # Exemplo de container SQL Server Express com algumas configurações
+
+ - docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=@Admin123" -e "MSSQL_PID=Express" -p 1433:1433 --name container_sql_server  -d mcr.microsoft.com/mssql/server:2022-latest
 
 # Links
 https://learn.microsoft.com/pt-br/windows/wsl/install
