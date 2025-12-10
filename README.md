@@ -215,6 +215,8 @@ networks:
 - apt-get update (atualiza a imagem do ubuntu)
 - apt-get install iputils-ping -y (programa que ajuda a fazer "ping" na rede)
 - apt-get install net-tools ("ifconfig e netstat" utilitários de rede. Com ifconfig é possível ver o IP da máquina)
+- sudo usermod -aG docker "usuário" (No lugar do "usuário" é só por o nome do usuário que deseja adicionar ao grupo do docker. Pode ser necessário reiniciar a máquina.)
+- cat /etc/group (Mosta os grupos de usuários)
 
 # Exemplo de container Mysql com algumas configurações
 
